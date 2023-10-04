@@ -23,7 +23,7 @@ COPY ./src/ $INST_DIR
 
 # Run installations
 RUN \
-  apt-get update \
+  apt-get update && \
   for SCRIPT in $INST_SCRIPTS; do \
     bash ${INST_DIR}${SCRIPT}; \
   done && \
