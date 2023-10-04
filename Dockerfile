@@ -30,8 +30,8 @@ WORKDIR /tmp
 
 # download and set up dependencies for autopsy/sleuthkit
 RUN wget https://github.com/sleuthkit/autopsy/releases/download/autopsy-4.21.0/autopsy-4.21.0.zip && \
-    wget https://github.com/sleuthkit/autopsy/blob/develop/linux_macos_install_scripts/install_prereqs_ubuntu.sh && \
-    wget https://github.com/sleuthkit/autopsy/blob/develop/linux_macos_install_scripts/install_application.sh && \
+    wget https://raw.githubusercontent.com/sleuthkit/autopsy/develop/linux_macos_install_scripts/install_prereqs_ubuntu.sh && \
+    wget https://raw.githubusercontent.com/sleuthkit/autopsy/develop/linux_macos_install_scripts/install_application.sh && \
     wget https://github.com/sleuthkit/sleuthkit/releases/download/sleuthkit-4.12.1/sleuthkit-java_4.12.1-1_amd64.deb
 
 RUN bash install_prereqs_ubuntu.sh
