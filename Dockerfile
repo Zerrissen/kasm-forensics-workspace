@@ -35,7 +35,7 @@ RUN wget https://github.com/sleuthkit/autopsy/releases/download/autopsy-4.21.0/a
     wget https://github.com/sleuthkit/sleuthkit/releases/download/sleuthkit-4.12.1/sleuthkit-java_4.12.1-1_amd64.deb
 
 RUN bash install_prereqs_ubuntu.sh
-RUN apt install sleuthkit-java_4.12.1-1_amd64.deb
+RUN apt install /tmp/sleuthkit-java_4.12.1-1_amd64.deb
 RUN bash install_application.sh -z autopsy-4.21.0.zip -i ~/autopsy -j /usr/lib/jvm/java-1.17.0-openjdk-amd64
 
 
