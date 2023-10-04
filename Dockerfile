@@ -22,13 +22,12 @@ ENV DEBIAN_FRONTEND=noninteractive \
 COPY ./src/ $INST_DIR
 
 # Run installations
+RUN apt-get update
+RUN apt-get install -y autopsy
 RUN \
-  apt-get update && \
   for SCRIPT in $INST_SCRIPTS; do \
     bash ${INST_DIR}${SCRIPT}; \
   done && \
-  # Install autopsy
-  apt-get install -y autopsy && \
 
   $STARTUPDIR/set_user_permission.sh $HOME && \
   rm -f /etc/X11/xinit/Xclients && \
