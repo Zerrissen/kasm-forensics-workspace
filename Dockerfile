@@ -1,44 +1,29 @@
-ARG BASE_TAG="1.14.0-rolling"
-ARG BASE_IMAGE="core-ubuntu-focal"
-FROM kasmweb/$BASE_IMAGE:$BASE_TAG
-
+FROM kasmweb/core-ubuntu-focal:1.14.0
 USER root
 
 ENV HOME /home/kasm-default-profile
 ENV STARTUPDIR /dockerstartup
+ENV INST_SCRIPTS $STARTUPDIR/install
 WORKDIR $HOME
 
-### Envrionment config
-ENV DEBIAN_FRONTEND=noninteractive \
-    SKIP_CLEAN=true \
-    KASM_RX_HOME=$STARTUPDIR/kasmrx \
-    DONT_PROMPT_WSL_INSTALL="No_Prompt_please" \
-    INST_DIR=$STARTUPDIR/install \
-    INST_SCRIPTS="/ubuntu/install/firefox/install_firefox.sh \
-                  /ubuntu/install/sublime_text/install_sublime_text.sh \
-                  /ubuntu/install/cleanup/cleanup.sh"
+######### Customize Container Here ###########
 
-# Copy install scripts
-COPY ./src/ $INST_DIR
-
-# Run installations
 RUN apt-get update
-RUN apt-get install -y autopsy
-RUN \
-  for SCRIPT in $INST_SCRIPTS; do \
-    bash ${INST_DIR}${SCRIPT}; \
-  done && \
+RUN apt-get install -y autopsy firefox sublime-text
 
-  $STARTUPDIR/set_user_permission.sh $HOME && \
-  rm -f /etc/X11/xinit/Xclients && \
-  chown 1000:0 $HOME && \
-  mkdir -p /home/kasm-user && \
-  chown -R 1000:0 /home/kasm-user && \
-  rm -Rf ${INST_DIR}
+WORKDIR /tmp
+RUN wget https://raw.githubusercontent.com/kasmtech/workspaces-images/develop/src/ubuntu/install/cleanup/cleanup.sh && \
+    bash cleanup.sh && \
+    rm -rf cleanup.sh
 
-# Userspace Runtime
+
+######### End Customizations ###########
+
+RUN chown 1000:0 $HOME
+RUN $STARTUPDIR/set_user_permission.sh $HOME
+
 ENV HOME /home/kasm-user
 WORKDIR $HOME
-USER 1000
+RUN mkdir -p $HOME && chown -R 1000:0 $HOME
 
-CMD ["--tail-log"]
+USER 1000
